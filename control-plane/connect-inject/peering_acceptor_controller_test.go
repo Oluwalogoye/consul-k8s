@@ -395,6 +395,8 @@ func TestReconcileCreateUpdatePeeringAcceptor(t *testing.T) {
 			require.NoError(t, err)
 			expSecrets := tt.expectedK8sSecrets()
 			require.Equal(t, expSecrets[0].Name, createdSecret.Name)
+			require.Contains(t, createdSecret.Labels, labelPeeringToken)
+			require.Equal(t, createdSecret.Labels[labelPeeringToken], "true")
 			// This assertion needs to be on StringData rather than Data because in the fake K8s client the contents are
 			// stored in StringData if that's how the secret was initialized in the fake client. In a real cluster, this
 			// StringData is an input only field, and shouldn't be read from.
@@ -959,4 +961,8 @@ func TestAcceptorUpdateStatusError(t *testing.T) {
 
 		})
 	}
+}
+
+func TestAcceptor_FilterPeeringAcceptor(t *testing.T) {
+
 }
